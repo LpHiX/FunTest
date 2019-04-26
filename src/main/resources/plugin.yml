@@ -1,0 +1,5 @@
+name: FunTest
+version: ${project.version}
+main: me.i234.gangamlorder.funtest.FunTest
+api-version: 1.13
+load: STARTUP
