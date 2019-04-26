@@ -33,8 +33,4 @@ public final class FunTest extends JavaPlugin{
         instance = null;
         getLogger().log(Level.INFO, "Successfully disabled  ");
     }
-
-    public static Plugin getInstance(){
-        return instance;
-    }
 }
