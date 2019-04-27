@@ -12,7 +12,7 @@ import org.bukkit.util.Vector;
 public class EntityDamageByEntityListener implements Listener {
 
     @EventHandler
-    public void entityDamageByEntityEvent(EntityDamageByEntityEvent event){
+    public void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
         Entity damager = event.getDamager();
         Entity damaged = event.getEntity();
         if (!damager.getType().equals(EntityType.SNOWBALL)) {

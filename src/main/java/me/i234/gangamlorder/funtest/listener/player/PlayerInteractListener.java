@@ -23,7 +23,7 @@ public class PlayerInteractListener implements Listener {
     public void playerInteractEvent(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
-        if(item==null){
+        if (item == null) {
             return;
         }
         switch (item.getType()) {
@@ -79,5 +79,10 @@ public class PlayerInteractListener implements Listener {
                 player.openInventory(inv);
                 break;
         }
+        /*
+        TODO Get entity, add it to specified team.
+        create a new team TODO  Team team = new Team("Name");
+        add a member using TODO team.addMember(entity);
+         */
     }
 }

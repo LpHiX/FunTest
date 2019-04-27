@@ -1,17 +1,26 @@
 package me.i234.gangamlorder.funtest;
 
+import com.gmail.andrewandy.object.TeamManager;
 import me.i234.gangamlorder.funtest.listener.entities.EntityDamageByEntityListener;
 import me.i234.gangamlorder.funtest.listener.entities.ProjectileHitListener;
 import me.i234.gangamlorder.funtest.listener.player.PlayerInteractListener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
 
-public final class FunTest extends JavaPlugin{
+public final class FunTest extends JavaPlugin {
 
     private static FunTest instance;
+    private static TeamManager manager = new TeamManager();
+
+    public static FunTest getInstance() {
+        return instance;
+    }
+
+    public static TeamManager getManager() {
+        return manager;
+    }
 
     @Override
     public void onEnable() {

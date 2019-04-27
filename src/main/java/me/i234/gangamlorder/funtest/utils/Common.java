@@ -1,5 +1,6 @@
 package me.i234.gangamlorder.funtest.utils;
 
+import me.i234.gangamlorder.funtest.FunTest;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -9,15 +10,27 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class Common {
-    public static String colorize(String message){
+    public static String colorize(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
-    public static Inventory makeGUI(String uncoloredName, int size, Map<Integer, ItemStack> buttonMap, ItemStack defaultItem) {
+    /**
+     * Create a inventory from params
+     *
+     * @param uncoloredName Name of the inventory.
+     * @param size          The size.
+     * @param buttonMap     map of the the slot to the button.
+     * @param defaultItem   Default item type of the menu. Will use <code>Material.AIR</code> if null is specified.
+     * @return an Inventory
+     */
+
+    public static Inventory makeGUI(String uncoloredName, int size, Map<Integer, ItemStack> buttonMap, @Nullable ItemStack defaultItem) {
         Inventory inv = Bukkit.createInventory(null, size, Common.colorize((uncoloredName)));
         ItemStack[] contents = inv.getContents();
         for (int index = 0; index < contents.length; index++) {
@@ -28,17 +41,30 @@ public class Common {
             if (defaultItem == null) {
                 defaultItem = new ItemStack(Material.AIR);
 
-            }// else{
-//                ItemMeta defaultItemMeta = defaultItem.getItemMeta();
-//                defaultItemMeta.setDisplayName("");
-//                defaultItem.setItemMeta(defaultItemMeta);
-//            }
+            } else {
+                ItemMeta defaultItemMeta = defaultItem.getItemMeta();
+                defaultItemMeta.setDisplayName(" ");
+                defaultItem.setItemMeta(defaultItemMeta);
+            }
             contents[index] = defaultItem;
         }
         inv.setContents(contents);
         return inv;
     }
 
+    /**
+     * make an item from given params.
+     *
+     * @param uncoloredName A name that will be colorised automatically.
+     * @param itemType      The Material of the item time
+     * @param lore          the lore of the item
+     * @param ench          enchantments of the item
+     * @param enchLevel     level of the enchant
+     * @param hideEnch      hide the enchant
+     * @return an {@link ItemStack} of the item ready to be used.
+     */
+    //TODO make Map<Enchantment, Integer> for enchants.
+    @Deprecated
     public static ItemStack makeItem(String uncoloredName, Material itemType, List<String> lore, List<Enchantment> ench, List<Integer> enchLevel, Boolean hideEnch) {
         ItemStack item = new ItemStack(itemType);
         ItemMeta meta = item.getItemMeta();
@@ -60,5 +86,9 @@ public class Common {
         }
         item.setItemMeta(meta);
         return item;
+    }
+
+    public static void log(Level level, String message) {
+        FunTest.getInstance().getServer().getLogger().log(level, colorize(message));
     }
 }
