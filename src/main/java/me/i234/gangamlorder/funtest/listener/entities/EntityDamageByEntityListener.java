@@ -3,6 +3,7 @@ package me.i234.gangamlorder.funtest.listener.entities;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -17,6 +18,14 @@ public class EntityDamageByEntityListener implements Listener {
         if (!damager.getType().equals(EntityType.SNOWBALL)) {
             return;
         }
+
+        if (damaged instanceof LivingEntity) {
+            LivingEntity entity = (LivingEntity) damaged;
+            //Do code
+        }
+
+
+
         for (double y = 0; y <= 2; y += 0.01) {
             double x = 1 * Math.cos(y * 10);
             double z = 1 * Math.sin(y * 10);
