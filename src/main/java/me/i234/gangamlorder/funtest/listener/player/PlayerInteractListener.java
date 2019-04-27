@@ -1,6 +1,5 @@
 package me.i234.gangamlorder.funtest.listener.player;
 
-import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -27,8 +26,7 @@ public class PlayerInteractListener implements Listener {
         // GRAY DYE
         if(item.getType().equals(Material.GRAY_DYE)) {
             List<Block> blockList = player.getLineOfSight(null, 100);
-            for (int index = 0; index < blockList.size(); index++) {
-                Block block = blockList.get(index);
+            for (Block block : blockList) {
                 if (block.getType().equals(Material.AIR)) {
                     continue;
                 }
