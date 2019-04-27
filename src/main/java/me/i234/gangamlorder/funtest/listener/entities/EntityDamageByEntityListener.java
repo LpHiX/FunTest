@@ -18,14 +18,15 @@ public class EntityDamageByEntityListener implements Listener {
         if (!damager.getType().equals(EntityType.SNOWBALL)) {
             return;
         }
-
         if (damaged instanceof LivingEntity) {
             LivingEntity entity = (LivingEntity) damaged;
-            //Do code
+            if (entity.getHealth() >= 5) {
+                entity.setHealth(entity.getHealth() - 5);
+            } else {
+                entity.setHealth(0);
+            }
+            entity.getWorld().strikeLightning(entity.getLocation());
         }
-
-
-
         for (double y = 0; y <= 2; y += 0.01) {
             double x = 1 * Math.cos(y * 10);
             double z = 1 * Math.sin(y * 10);
