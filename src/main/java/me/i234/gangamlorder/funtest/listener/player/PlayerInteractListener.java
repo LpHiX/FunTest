@@ -1,21 +1,27 @@
 package me.i234.gangamlorder.funtest.listener.player;
 
+import me.i234.gangamlorder.funtest.FunTest;
+import me.i234.gangamlorder.funtest.object.Team;
 import me.i234.gangamlorder.funtest.utils.Common;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.*;
+import java.util.logging.Level;
 
 public class PlayerInteractListener implements Listener {
 
@@ -70,19 +76,82 @@ public class PlayerInteractListener implements Listener {
                     return;
                 }
                 Map<Integer, ItemStack> buttonMap = new HashMap<>();
-                buttonMap.put(1, Common.makeItem("&a&lHelp &6&lLpHiX", Material.DIAMOND_SWORD, Arrays.asList("&7Join LpHiX's team!", "Mobs in LpHiX's team will ignore you"), Collections.singletonList(Enchantment.PROTECTION_ENVIRONMENTAL), Collections.singletonList(1), true));
-                buttonMap.put(2, Common.makeItem("&aSet nearby mobs to LpHiX's team", Material.LIME_DYE, Arrays.asList("&7In a range of 20m", "WIP"), null, null, true));
-                buttonMap.put(4, Common.makeItem("&c&lHelp &c&landrewandy", Material.WOODEN_SWORD, Arrays.asList("&7Join Andy's team!", "Mobs in Andy's team will ignore you"), null, null, true));
-                buttonMap.put(5, Common.makeItem("&cSet nearby mobs to Andy's team", Material.ROSE_RED, Arrays.asList("&7In a range of 20m", "WIP"), null, null, true));
-                buttonMap.put(7, Common.makeItem("&cExit the menu", Material.BARRIER, null, null, null, true));
+                buttonMap.put(1, Common.makeItem("&a&lHelp &6&lLpHiX", Material.DIAMOND_SWORD, Arrays.asList("&7Join LpHiX's team!", "Mobs in LpHiX's team will ignore you"), Collections.singletonMap(Enchantment.PROTECTION_ENVIRONMENTAL, 1), true));
+                buttonMap.put(2, Common.makeItem("&aSet nearby mobs to LpHiX's team", Material.LIME_DYE, Arrays.asList("&7In a range of 20m", "WIP"), null, true));
+                buttonMap.put(4, Common.makeItem("&c&lHelp &c&landrewandy", Material.WOODEN_SWORD, Arrays.asList("&7Join Andy's team!", "Mobs in Andy's team will ignore you"), null, true));
+                buttonMap.put(5, Common.makeItem("&cSet nearby mobs to Andy's team", Material.ROSE_RED, Arrays.asList("&7In a range of 20m", "WIP"), null, true));
+                buttonMap.put(7, Common.makeItem("&cExit the menu", Material.BARRIER, null, null, true));
                 Inventory inv = Common.makeGUI("&c&lArmy &6&lController", 9, buttonMap, null);
                 player.openInventory(inv);
+
+                class ClickListener implements Listener {
+                    @EventHandler
+                    public void clickListener(InventoryClickEvent event) {
+                        if (!event.getInventory().equals(inv)) {
+                            return;
+                        }
+                        event.setCancelled(true);
+                        switch (event.getSlot()) {
+                            default:
+                                break;
+                            case 1:
+                                Team.getTeamByName("LpHiX").addMember(player);
+                                Common.log(Level.INFO, "&aAdded player to LpHiX's team: &e" + player);
+                                if (!Team.getTeamByName("Andy").hasMember(player)) {
+                                    Common.log(Level.INFO, "&cThis person is not in Andy's team");
+                                    break;
+                                }
+                                Common.log(Level.INFO, "&cThis person is in Andy's team");
+                                Team.getTeamByName("Andy").removeMember(player);
+                                break;
+                            case 2:
+                                for (Entity mobs : player.getNearbyEntities(20, 20, 20)) {
+                                    if (!(mobs instanceof LivingEntity)) {
+                                        break;
+                                    }
+                                    Team.getTeamByName("LpHiX").addMember(mobs);
+                                    Common.log(Level.INFO, "&aAdded entity to LpHiX's team: &e" + mobs.getType().toString());
+                                    if (!Team.getTeamByName("Andy").hasMember(mobs)) {
+                                        Common.log(Level.INFO, "&2This ENTITY is not in Andy's team");
+                                        continue;
+                                    }
+                                    Common.log(Level.INFO, "&2This ENTITY is in Andy's team");
+                                    Team.getTeamByName("Andy").removeMember(mobs);
+                                }
+                                break;
+                            case 4:
+                                Team.getTeamByName("Andy").addMember(player);
+                                Common.log(Level.INFO, "&aAdded player to Andy's team: &e" + player);
+                                if (!Team.getTeamByName("LpHiX").hasMember(player)) {
+                                    Common.log(Level.INFO, "&cThis person is not in LpHiX's team");
+                                    break;
+                                }
+                                Common.log(Level.INFO, "&cThis person is in LpHiX's team");
+                                Team.getTeamByName("LpHiX").removeMember(player);
+                                break;
+                            case 5:
+                                for (Entity mobs : player.getNearbyEntities(20, 20, 20)) {
+                                    if (!(mobs instanceof LivingEntity)) {
+                                        break;
+                                    }
+                                    Team.getTeamByName("Andy").addMember(mobs);
+                                    Common.log(Level.INFO, "&aAdded entity to Andy's team: &e" + mobs.getType().toString());
+                                    if (!Team.getTeamByName("LpHiX").hasMember(mobs)) {
+                                        Common.log(Level.INFO, "&2This ENTITY is not in Andy's team");
+                                        continue;
+                                    }
+                                    Common.log(Level.INFO, "&2This ENTITY is in Andy's team");
+                                    Team.getTeamByName("LpHiX").removeMember(mobs);
+                                }
+                                break;
+                            case 6:
+                                player.closeInventory();
+                                break;
+                        }
+                    }
+                }
+                FunTest.getInstance().getServer().getPluginManager().registerEvents(new ClickListener(), FunTest.getInstance());
                 break;
         }
-        /*
-        TODO Get entity, add it to specified team.
-        create a new team TODO  Team team = new Team("Name");
-        add a member using TODO team.addMember(entity);
-         */
     }
 }

@@ -41,31 +41,19 @@ public class Common {
             if (defaultItem == null) {
                 defaultItem = new ItemStack(Material.AIR);
 
-            } else {
+            }/* else {
                 ItemMeta defaultItemMeta = defaultItem.getItemMeta();
                 defaultItemMeta.setDisplayName(" ");
                 defaultItem.setItemMeta(defaultItemMeta);
-            }
+            }*/
             contents[index] = defaultItem;
         }
         inv.setContents(contents);
         return inv;
     }
 
-    /**
-     * make an item from given params.
-     *
-     * @param uncoloredName A name that will be colorised automatically.
-     * @param itemType      The Material of the item time
-     * @param lore          the lore of the item
-     * @param ench          enchantments of the item
-     * @param enchLevel     level of the enchant
-     * @param hideEnch      hide the enchant
-     * @return an {@link ItemStack} of the item ready to be used.
-     */
     //TODO make Map<Enchantment, Integer> for enchants.
-    @Deprecated
-    public static ItemStack makeItem(String uncoloredName, Material itemType, List<String> lore, List<Enchantment> ench, List<Integer> enchLevel, Boolean hideEnch) {
+    public static ItemStack makeItem(String uncoloredName, Material itemType, List<String> lore, Map<Enchantment, Integer> ench, Boolean hideEnch) {
         ItemStack item = new ItemStack(itemType);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(Common.colorize(uncoloredName));
@@ -76,8 +64,8 @@ public class Common {
             meta.setLore(lore);
         }
         if (ench != null) {
-            for (int index = 0; index < ench.size(); index++) {
-                meta.addEnchant(ench.get(index), enchLevel.get(index), true);
+            for (Enchantment enchantment : ench.keySet()) {
+                meta.addEnchant(enchantment, ench.get(enchantment), true);
 
             }
         }
