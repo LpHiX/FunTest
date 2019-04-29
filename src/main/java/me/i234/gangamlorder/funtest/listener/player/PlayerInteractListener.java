@@ -3,12 +3,13 @@ package me.i234.gangamlorder.funtest.listener.player;
 import me.i234.gangamlorder.funtest.FunTest;
 import me.i234.gangamlorder.funtest.object.Team;
 import me.i234.gangamlorder.funtest.utils.Common;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
@@ -91,57 +92,73 @@ public class PlayerInteractListener implements Listener {
                             return;
                         }
                         event.setCancelled(true);
+                        Team TeamL = Team.getTeamByName("LpHiX");
+                        Team TeamA = Team.getTeamByName("Andy");
+                        if (TeamL == null || TeamA == null) {
+                            throw new IllegalStateException("Team is null");
+                        }
                         switch (event.getSlot()) {
                             default:
                                 break;
                             case 1:
-                                Team.getTeamByName("LpHiX").addMember(player);
+                                TeamL.addMember(player);
                                 Common.log(Level.INFO, "&aAdded player to LpHiX's team: &e" + player);
-                                if (!Team.getTeamByName("Andy").hasMember(player)) {
+                                if (!TeamA.hasMember(player)) {
                                     Common.log(Level.INFO, "&cThis person is not in Andy's team");
                                     break;
                                 }
                                 Common.log(Level.INFO, "&cThis person is in Andy's team");
-                                Team.getTeamByName("Andy").removeMember(player);
+                                TeamA.removeMember(player);
                                 break;
                             case 2:
-                                for (Entity mobs : player.getNearbyEntities(20, 20, 20)) {
-                                    if (!(mobs instanceof LivingEntity)) {
-                                        break;
-                                    }
-                                    Team.getTeamByName("LpHiX").addMember(mobs);
+                                Common.log(Level.INFO, "10");
+                                for (Entity mobs : player.getNearbyEntities(10, 10, 10)) {
+                                    Common.log(Level.INFO, "20");
+                                    TeamL.addMember(mobs);
                                     Common.log(Level.INFO, "&aAdded entity to LpHiX's team: &e" + mobs.getType().toString());
-                                    if (!Team.getTeamByName("Andy").hasMember(mobs)) {
+                                    for (double y = 0; y >= -2; y -= 0.01) {
+                                        double x = y * Math.cos(y * 10);
+                                        double z = y * Math.sin(y * 10);
+                                        Location particleLocation = new Location(mobs.getWorld(), mobs.getLocation().getX() + x, mobs.getLocation().getY() + y + 2, mobs.getLocation().getZ() + z);
+                                        Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 255, 0), 3);
+                                        mobs.getWorld().spawnParticle(Particle.REDSTONE, particleLocation, 2, dustOptions);
+                                    }
+                                    if (!TeamA.hasMember(mobs)) {
                                         Common.log(Level.INFO, "&2This ENTITY is not in Andy's team");
                                         continue;
                                     }
                                     Common.log(Level.INFO, "&2This ENTITY is in Andy's team");
-                                    Team.getTeamByName("Andy").removeMember(mobs);
+                                    TeamA.removeMember(mobs);
                                 }
                                 break;
                             case 4:
-                                Team.getTeamByName("Andy").addMember(player);
+                                TeamA.addMember(player);
                                 Common.log(Level.INFO, "&aAdded player to Andy's team: &e" + player);
-                                if (!Team.getTeamByName("LpHiX").hasMember(player)) {
+                                if (!TeamL.hasMember(player)) {
                                     Common.log(Level.INFO, "&cThis person is not in LpHiX's team");
                                     break;
                                 }
                                 Common.log(Level.INFO, "&cThis person is in LpHiX's team");
-                                Team.getTeamByName("LpHiX").removeMember(player);
+                                TeamL.removeMember(player);
                                 break;
                             case 5:
-                                for (Entity mobs : player.getNearbyEntities(20, 20, 20)) {
-                                    if (!(mobs instanceof LivingEntity)) {
-                                        break;
-                                    }
-                                    Team.getTeamByName("Andy").addMember(mobs);
+                                for (Entity mobs : player.getNearbyEntities(10, 10, 10)) {
+                                    TeamA.addMember(mobs);
                                     Common.log(Level.INFO, "&aAdded entity to Andy's team: &e" + mobs.getType().toString());
-                                    if (!Team.getTeamByName("LpHiX").hasMember(mobs)) {
+                                    for (double y = 0; y >= -2; y -= 0.01) {
+                                        double x = y * Math.cos(y * 10);
+                                        double z = y * Math.sin(y * 10);
+                                        Common.log(Level.INFO, "x= " + x + " y= " + y + " z= " + z);
+                                        Location particleLocation = new Location(mobs.getWorld(), mobs.getLocation().getX() + x, mobs.getLocation().getY() + y + 2, mobs.getLocation().getZ() + z);
+                                        Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(255, 0, 0), 3);
+                                        mobs.getWorld().spawnParticle(Particle.REDSTONE, particleLocation, 2, dustOptions);
+                                    }
+                                    if (!TeamL.hasMember(mobs)) {
                                         Common.log(Level.INFO, "&2This ENTITY is not in Andy's team");
                                         continue;
                                     }
-                                    Common.log(Level.INFO, "&2This ENTITY is in Andy's team");
-                                    Team.getTeamByName("LpHiX").removeMember(mobs);
+                                    Common.log(Level.INFO, "&2This ENTITY is in LpHiX's team");
+                                    TeamL.removeMember(mobs);
                                 }
                                 break;
                             case 6:

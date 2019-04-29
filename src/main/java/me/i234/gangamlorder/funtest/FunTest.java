@@ -9,6 +9,7 @@ import me.i234.gangamlorder.funtest.object.TeamManager;
 import me.i234.gangamlorder.funtest.utils.Common;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.logging.Level;
 
@@ -42,7 +43,11 @@ public final class FunTest extends JavaPlugin {
         Team Andy = new Team("Andy");
         teamManager.createTeam(Andy);
 
-
+        new BukkitRunnable() {
+            public void run() {
+                EntityTargetLivingEntityListener.findNewTarget();
+            }
+        }.runTaskTimer(this, 0, 100);
     }
 
     @Override
