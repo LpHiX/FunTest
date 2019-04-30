@@ -3,6 +3,7 @@ package me.i234.gangamlorder.funtest;
 import me.i234.gangamlorder.funtest.listener.entities.EntityDamageByEntityListener;
 import me.i234.gangamlorder.funtest.listener.entities.EntityTargetLivingEntityListener;
 import me.i234.gangamlorder.funtest.listener.entities.ProjectileHitListener;
+import me.i234.gangamlorder.funtest.listener.player.PlayerChatListener;
 import me.i234.gangamlorder.funtest.listener.player.PlayerInteractListener;
 import me.i234.gangamlorder.funtest.object.Team;
 import me.i234.gangamlorder.funtest.object.TeamManager;
@@ -32,6 +33,7 @@ public final class FunTest extends JavaPlugin {
         instance = this;
         PluginManager pluginManager = getServer().getPluginManager();
         pluginManager.registerEvents(new PlayerInteractListener(), this);
+        pluginManager.registerEvents(new PlayerChatListener(), this);
         pluginManager.registerEvents(new ProjectileHitListener(), this);
         pluginManager.registerEvents(new EntityDamageByEntityListener(), this);
         pluginManager.registerEvents(new EntityTargetLivingEntityListener(), this);

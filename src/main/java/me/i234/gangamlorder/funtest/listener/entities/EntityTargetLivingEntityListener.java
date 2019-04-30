@@ -25,7 +25,8 @@ public class EntityTargetLivingEntityListener implements Listener {
             throw new IllegalStateException("World is null");
         }
         for (LivingEntity nonLivingEntity : world.getLivingEntities()) {
-            if (nonLivingEntity.getType().equals(EntityType.PLAYER) || nonLivingEntity.getType().equals(EntityType.BAT)) {
+            EntityType enType = nonLivingEntity.getType();
+            if (enType.equals(EntityType.PLAYER) || enType.equals(EntityType.BAT) || enType.equals(EntityType.PHANTOM) || enType.equals(EntityType.SLIME)) {
                 continue;
             }
             Creature entity = (Creature) nonLivingEntity;
